@@ -1,5 +1,8 @@
 import { ApiPromise, WsProvider } from '@polkadot/api'
-
+import { KeyringPair } from '@polkadot/keyring/types'
+import BN from 'bn.js'
+import { DEFAULT_TOKEN_DECIMALS } from './constants/chain'
+import toBn from './utils/toBn'
 /**
  * @class DotSama
  * The DotSama class defines the `getInstance` method that lets clients access the unique singleton instance.
@@ -7,6 +10,7 @@ import { ApiPromise, WsProvider } from '@polkadot/api'
 export class DotSama {
   private api: Promise<ApiPromise> | null
   private uri: string
+  private decimals: number = DEFAULT_TOKEN_DECIMALS
   private static instanceMap: Map<string, DotSama> = new Map<string, DotSama>()
 
   /**
@@ -24,7 +28,8 @@ export class DotSama {
    */
   private async connectToNode(uri: string) {
     const provider = new WsProvider(uri)
-    const api = await ApiPromise.create({ provider })
+    const api = await ApiPromise.create({ provider, throwOnConnect: true })
+    this.decimals = api.registry.chainDecimals[0]
     return api
   }
 
@@ -56,5 +61,16 @@ export class DotSama {
   async disconnect(): Promise<void> {
     const api = await this.getApi()
     api.disconnect()
+  }
+
+  async createCrowdloan() {}
+
+  async getCrowdloanFunds() {}
+
+  async contributeToCrowdloan(account: KeyringPair, parachainId: string, amount: string) {
+    const api = await this.getApi()
+    const valueToContribute = toBn(amount, this.decimals)
+    const extrinsic = api.tx.crowdloan.contribute(parachainId, valueToContribute, null)
+    // now we need to sign the transaction
   }
 }
