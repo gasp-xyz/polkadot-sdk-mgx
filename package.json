@@ -1,6 +1,6 @@
 {
   "name": "polkadot-sdk",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "SDK for communication with Polkadot and Kusama node",
   "main": "build/index.js",
   "types": "build/index.d.ts",
@@ -61,6 +61,7 @@
     "@polkadot/api": "^6.5.3",
     "big.js": "^6.1.1",
     "bn.js": "^5.2.0",
+    "buffer": "^6.0.3",
     "uuid": "^8.3.2"
   }
 }
