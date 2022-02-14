@@ -7,7 +7,7 @@ Big.DP = 40 // The maximum number of decimal places of the results of operations
 Big.NE = -40 // The negative exponent value at and below which toString returns exponential notation.
 Big.RM = 1 // Rounding mode: from half up
 
-export default (value: string, exponent?: number): BN => {
+export const toBN = (value: string, exponent?: number): BN => {
   if (!value) return new BN('0')
 
   try {
